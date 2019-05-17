@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wejay/models/track.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 class Queue extends StatelessWidget {
@@ -56,7 +57,15 @@ class Queue extends StatelessWidget {
                     return Center(child: Text('Nothing in queue'));
                   }
 
-                  List queue = result.data['upcomingTracks'].toList();
+                  List<dynamic> queue = result.data['upcomingTracks']
+                      .map((track) => new Track(
+                            title: track['title'],
+                            artist: track['artist'],
+                            position: 0,
+                            duration: 0,
+                            albumUrl: track['albumArtURI'],
+                          ))
+                      .toList();
 
                   return ListView.builder(
                     itemCount: queue.length,
@@ -68,16 +77,16 @@ class Queue extends StatelessWidget {
                         child: ListTile(
                           trailing: Text((index + 1).toString()),
                           leading: Image(
-                            image: NetworkImage(track['albumArtURI']),
+                            image: NetworkImage(track.albumUrl),
                           ),
                           title: Text(
-                            track['title'],
+                            track.title,
                             style: TextStyle(
                               fontSize: 14.0,
                             ),
                           ),
                           subtitle: Text(
-                            track['artist'],
+                            track.artist,
                             style: TextStyle(
                               fontSize: 12.0,
                             ),
