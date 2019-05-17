@@ -44,9 +44,7 @@ class Queue extends StatelessWidget {
             ),
             Expanded(
               child: Query(
-                options: QueryOptions(
-                  document: queueQuery,
-                ),
+                options: QueryOptions(document: queueQuery, pollInterval: 60),
                 builder: (QueryResult result, {VoidCallback refetch}) {
                   if (result.loading) {
                     return Center(child: CircularProgressIndicator());
@@ -66,6 +64,13 @@ class Queue extends StatelessWidget {
                             albumUrl: track['albumArtURI'],
                           ))
                       .toList();
+
+                  if (queue.length == 0) {
+                    return Padding(
+                      padding: EdgeInsets.only(top: 40.0),
+                      child: Text("Queue is empty"),
+                    );
+                  }
 
                   return ListView.builder(
                     itemCount: queue.length,
