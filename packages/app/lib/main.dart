@@ -6,6 +6,7 @@ void main() {
   runApp(
     MaterialApp(
       home: MyApp(),
+      theme: ThemeData(fontFamily: 'AlteHaas'),
     ),
   );
 }
@@ -14,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final HttpLink httpLink = HttpLink(
-      uri: 'http://192.168.110.190:4000',
+      uri: 'http://192.168.0.9:4000',
     );
 
     final ValueNotifier<GraphQLClient> client = ValueNotifier<GraphQLClient>(

@@ -88,6 +88,7 @@ class Queue extends StatelessWidget {
                             track.title,
                             style: TextStyle(
                               fontSize: 14.0,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                           subtitle: Text(

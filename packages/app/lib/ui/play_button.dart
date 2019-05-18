@@ -1,35 +1,61 @@
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 
 class PlayButton extends StatelessWidget {
-  final bool isPlaying;
-  final VoidCallback onPressed;
+  final String isPlayingQuery = """
+    query isPlaying {
+      isPlaying
+    }
+  """;
 
-  PlayButton(this.isPlaying, {this.onPressed});
+  final String togglePlayingMutation = """
+    mutation togglePlaying {
+      togglePlaying
+    }
+  """;
 
   @override
   Widget build(BuildContext context) {
-    return new Container(
-      decoration: new BoxDecoration(
-        gradient: new RadialGradient(
-          colors: <Color>[Colors.white, Colors.grey[200]],
-        ),
-        shape: BoxShape.circle,
-        boxShadow: [
-          new BoxShadow(
-            color: Colors.white10,
-            spreadRadius: 10.0,
+    return Query(
+      options: QueryOptions(document: isPlayingQuery, pollInterval: 5),
+      builder: (QueryResult result, {VoidCallback refetch}) {
+        final bool isPlaying =
+            result.loading ? false : result.data['isPlaying'] || false;
+
+        return Mutation(
+          options: MutationOptions(
+            document: togglePlayingMutation,
           ),
-        ],
-      ),
-      padding: const EdgeInsets.all(10.0),
-      child: new IconButton(
-        onPressed: onPressed,
-        iconSize: 40.0,
-        icon: new Icon(
-          isPlaying ? Icons.pause : Icons.play_arrow,
-          color: Colors.grey[800],
-        ),
-      ),
+          builder: (
+            RunMutation runMutation,
+            QueryResult mutationResult,
+          ) {
+            return Container(
+              decoration: BoxDecoration(
+                gradient: RadialGradient(
+                  colors: <Color>[Colors.white, Colors.grey[200]],
+                ),
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.white10,
+                    spreadRadius: 10.0,
+                  ),
+                ],
+              ),
+              padding: EdgeInsets.all(10.0),
+              child: IconButton(
+                onPressed: () => runMutation(null),
+                iconSize: 40.0,
+                icon: Icon(
+                  isPlaying ? Icons.pause : Icons.play_arrow,
+                  color: Colors.grey[800],
+                ),
+              ),
+            );
+          },
+        );
+      },
     );
   }
 }

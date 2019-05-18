@@ -1,16 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:wejay/models/track.dart';
 
 class ProgressBar extends StatefulWidget {
-  final String positionAsString;
-  final String durationAsString;
-  final int position;
-  final int duration;
+  final Track track;
 
   ProgressBar({
-    this.positionAsString,
-    this.durationAsString,
-    this.position,
-    this.duration,
+    this.track,
   });
 
   @override
@@ -23,12 +18,12 @@ class ProgressBarState extends State<ProgressBar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 20.0),
+      padding: EdgeInsets.only(bottom: 20.0, top: 20.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            widget.positionAsString,
+            widget.track.formatTime(widget.track.position),
             style: TextStyle(
               fontSize: 12.0,
               fontWeight: FontWeight.w400,
@@ -39,14 +34,14 @@ class ProgressBarState extends State<ProgressBar> {
             child: Container(
               width: 200,
               child: LinearProgressIndicator(
-                value: widget.position / widget.duration,
+                value: widget.track.position / widget.track.duration,
                 backgroundColor: Colors.black12,
                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white70),
               ),
             ),
           ),
           Text(
-            widget.durationAsString,
+            widget.track.formatTime(widget.track.duration),
             style: TextStyle(
               fontSize: 12.0,
               fontWeight: FontWeight.w400,
